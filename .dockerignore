@@ -1,0 +1,19 @@
+# Database host mount folders
+java-app-data
+mysql-data
+
+# Build output and dependencies
+target
+.mvn
+mvnw
+mvnw.cmd
+
+# Git and documentation
+.git
+.gitignore
+README.md
+screenshots
+LICENSE
+
+# Environment files
+.env
