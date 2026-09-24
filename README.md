@@ -1,45 +1,110 @@
-![Language](https://img.shields.io/badge/language-Java%20-blue.svg)
-![Technologies](https://img.shields.io/badge/technologies-Spring_boot%20-green.svg)
-![Technologies](https://img.shields.io/badge/technologies-Spring_MVC%20-green.svg)
-![Technologies](https://img.shields.io/badge/technologies-Spring_Security%20-green.svg)
-![Technologies](https://img.shields.io/badge/technologies-Spring_Data_jpa%20-green.svg)
-![Technologies](https://img.shields.io/badge/technologies-Thymeleaf_&_Bootstrap%20-purple.svg)
 
-# Expenses-Tracker-WebApp
-## Overview
-The Expenses Tracker App is a robust financial management solution developed using cutting-edge technologies such as Spring Boot, Spring Security, and MySQL. With user authentication and authorization features, users can securely sign up, sign in, and perform CRUD operations on their expenses. The app's intuitive interface, powered by Thymeleaf and Bootstrap, ensures a seamless user experience. The filtering functionality allows users to efficiently organize and analyze their financial data. Explore the power of streamlined expense tracking and financial control with this feature-rich application.<br> (Screenshots below for more illustration)
+# Expenses Tracker Web App
 
-## Technologies Used
-- Java
-- Spring boot
-- Spring MVC
-- Spring Security
-- Spring Data (JPA)
-- MySQL
-- Thymeleaf
-- Bootstrap
+A full-stack Spring Boot application with MySQL database, containerized with Docker and orchestrated via Docker Compose. Nginx serves as a reverse proxy for seamless request routing.
 
-## Features
-- **User Authentication and Authorization:** Securely sign up, sign in, and access the app with built-in authentication and authorization.
-- **CRUD Operations:** Perform essential financial tracking actions such as adding, reading, updating, and deleting expenses.
-- **Filtering:** Utilize the filtering feature to efficiently sort and view expenses based on various criteria.
+## 🏗️ Architecture
 
-## Getting Started
-1. **Clone the Repository:**
-`git clone https://github.com/your-username/expenses-tracker.git`
+- **Backend**: Spring Boot 3.2.2 (Java 17)
+- **Database**: MySQL 8.0
+- **Web Server**: Nginx (reverse proxy)
+- **Containerization**: Docker multi-stage builds
+- **Orchestration**: Docker Compose
 
-2. **Configure Database:**
-Set up MySQL database and update the application.properties file with your database configuration.
+## 📋 Prerequisites
 
-3. **Build and Run:**
-Build the project using your preferred IDE or with Maven:
-`mvn clean install`.
+- Docker & Docker Compose installed
+- Git installed
 
-4. **Run the application:**
-`java -jar target/expenses-tracker.jar`.
+## 🚀 Quick Start
 
-5. **Access the App:**
-Open your web browser and navigate to `http://localhost:8080`.
+### Clone the repository
+```bash
+git clone https://github.com/thesayam7/Expense-Tracker-Webapp.git
+cd Expenses-Tracker-WebApp
+```
+
+### Run with Docker Compose
+```bash
+docker compose up --build
+```
+
+The application will be available at:
+- **Frontend**: `http://localhost` (via Nginx)
+- **Backend API**: `http://localhost:8080` (direct)
+- **MySQL**: `localhost:3306`
+
+### Stop the application
+```bash
+docker compose down
+```
+
+## 🔧 Docker Implementation
+
+### Multi-Stage Build
+The Dockerfile uses a two-stage build process:
+1. **Stage 1 (Builder)**: Maven 3.9 compiles the Java application into a JAR
+2. **Stage 2 (Runtime)**: Alpine-based JRE 17 runs the compiled JAR
+
+This approach reduces the final image size by ~80% compared to single-stage builds.
+
+### Services
+
+| Service | Image | Port | Purpose |
+|---------|-------|------|---------|
+| `java_app` | Custom (multi-stage) | 8080 | Spring Boot application |
+| `mysql_db` | mysql:8.0 | 3306 | Expenses database |
+| `nginx` | Custom Nginx build | 80 | Reverse proxy |
+
+### Health Checks
+All services include health checks:
+- **Java App**: HTTP endpoint check every 10s
+- **MySQL**: Connection verification every 10s
+
+### Networking
+All services communicate via the `expenses-app-nw` bridge network, ensuring isolated and secure container communication.
+
+## 📊 Environment Variables
+
+Configured in `docker-compose.yml`:
+- `SPRING_DATASOURCE_URL`: MySQL connection string
+- `SPRING_DATASOURCE_USERNAME`: Database user (root)
+- `SPRING_DATASOURCE_PASSWORD`: Database password
+
+## 💾 Data Persistence
+
+MySQL data persists in the `java-app-data` volume, ensuring data survives container restarts.
+
+## 🛠️ Development
+
+To rebuild and restart services:
+```bash
+docker compose up --build
+```
+
+To view logs:
+```bash
+docker compose logs -f java_app
+```
+
+To access the database:
+```bash
+docker compose exec mysql_db mysql -u root -p expenses_tracker
+```
+
+## 📝 Key Features
+
+✅ Multi-stage Docker build for optimized images
+✅ Docker Compose orchestration with service dependencies
+✅ Health checks for reliability
+✅ Nginx reverse proxy configuration
+✅ Spring Boot with JPA, Security & Validation
+✅ MySQL database with automatic initialization
+✅ Custom networking for service isolation
+
+---
+
+**Ready to deploy?** Just clone and run `docker compose up --pull always`!
 
 ## ScreenShots
 ![Example Image](screenshots/1.png) <br>
@@ -51,8 +116,3 @@ Open your web browser and navigate to `http://localhost:8080`.
 ![Example Image](screenshots/7.png) <br>
 ![Example Image](screenshots/8.png) <br>
 
-## Contributions
-Contributions are welcome! If you find a bug or have suggestions for improvement, feel free to open an issue or create a pull request.
-
-## License
-This project is licensed under the MIT License.
